@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameManagerCalsses;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,8 +12,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GridInfo gridInfo;
     [SerializeField] Transform cardsParentTransform;
     [SerializeField] Vector2 TotalGap;
-    bool hasXPadding=false;
-    bool hasYPadding =false;
+    bool hasXPadding = false;
+    bool hasYPadding = false;
+    Card[] selectedCards;
+    [SerializeField] Color[] colours;
+    static bool canSelectCard;
+    WaitForSeconds delay = new WaitForSeconds(.7f);
+    #endregion
+    #region properties
+    public static bool CanSelectCard => canSelectCard;
     #endregion
     #region MonobehaviourCallbacks
     private void OnEnable()
@@ -24,9 +32,15 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(this);
+            return;
         }
+        selectedCards = new Card[2];
     }
+    private void Start()
+    {
+        CreateGrid();
 
+    }
     #endregion
     #region Functions
     [ContextMenu("create grid test")]
@@ -34,6 +48,8 @@ public class GameManager : MonoBehaviour
     {
         Vector3 scale = CalcScale();
         Vector3 pos = Vector3.zero;
+        List<int> ids = creatIDList();
+        colours = createColorList();
         for (int i = 0; i < gridInfo.rowCount; i++)
         {
             for (int j = 0; j < gridInfo.coloumnCount; j++)
@@ -41,10 +57,13 @@ public class GameManager : MonoBehaviour
                 if (ObjectPool.Instantiate(cardPrefab, cardsParentTransform).TryGetComponent(out Card card))
                 {
                     pos = CalcPos(i, j, ref scale);
+                    card.SetId(getRnadomIdFromList(ids));
                     card.SetCardAppearence(ref pos, ref scale);
+                    card.SetForeAppearence(colours[card.ID]);
                 }
             }
         }
+        canSelectCard = true;
     }
     [ContextMenu("clear the grid")]
     void clearGrid()
@@ -89,11 +108,11 @@ public class GameManager : MonoBehaviour
     Vector3 CalcPos(int row, int coloumn, ref Vector3 scale)
     {
         Vector3 pos = Vector3.zero;
-        float xPadding = hasXPadding ? 
-            coloumn * TotalGap.x * scale.x / (gridInfo.coloumnCount - 1) : 
+        float xPadding = hasXPadding ?
+            coloumn * TotalGap.x * scale.x / (gridInfo.coloumnCount - 1) :
             0.0f;
         float yPadding = hasYPadding ?
-            row * TotalGap.y * scale.y / (gridInfo.rowCount - 1) : 
+            row * TotalGap.y * scale.y / (gridInfo.rowCount - 1) :
             0.0f;
         pos.x = scale.x * coloumn + xPadding + scale.x / 2;
         pos.y = -(scale.y * row + yPadding + scale.y / 2);
@@ -101,19 +120,116 @@ public class GameManager : MonoBehaviour
         return pos;
 
     }
-    #endregion
-    #region localClasses
-    [System.Serializable]
-    public class GridCriterians
+
+    List<int> creatIDList()
     {
-        public Transform topLeft;
-        public Transform bottomRight;
+
+        int count = gridInfo.rowCount * gridInfo.coloumnCount / 2;
+        List<int> ids = new List<int>(count * 2);
+        for (int i = 0; i < count; i++)
+        {
+            ids.Add(i);
+            ids.Add(i);
+        }
+        return ids;
     }
-    [System.Serializable]
-    public class GridInfo
+    Color[] createColorList()
     {
-        public int rowCount;
-        public int coloumnCount;
+        var cols = new Color[gridInfo.rowCount * gridInfo.coloumnCount / 2];
+        for (int i = 0; i < cols.Length; i++)
+        {
+            cols[i] = new Color(getRandNum(), getRandNum(), getRandNum(), 1.0f);
+        }
+        return cols;
+    }
+    float getRandNum()
+    {
+        float output = (float)Random.Range(0, 255) / 255;
+        return output;
+
+    }
+    int getRnadomIdFromList(List<int> ids)
+    {
+        int index = Random.Range(0, ids.Count);
+        int outPut = ids[index];
+        ids.RemoveAt(index);
+        return outPut;
+
+    }
+    public void OnCardSelect(Card card)
+    {
+        if (selectedCards[0] == null)
+        {
+            selectedCards[0] = card;
+        }
+        else
+        {
+            if (card != selectedCards[0])
+            {
+                selectedCards[1] = card;
+                checkForMatch();
+            }
+            else
+            {
+                selectedCards[0] = null;
+            }
+
+        }
+    }
+    void checkForMatch()
+    {
+        if (selectedCards[0].ID == selectedCards[1].ID)
+        {
+            OnMatch();
+        }
+        else
+        {
+            OnWrongMatch();
+        }
+
+
+    }
+    void OnMatch()
+    {
+        //for (int i = 0; i < selectedCards.Length; i++)
+        //{
+        //    selectedCards[i].gameObject.SetActive(false);
+        //    selectedCards[i] = null;
+        //}
+        StartCoroutine(OnMatchCoroutine());
+    }
+    void OnWrongMatch()
+    {
+        //for (int i = 0; i < selectedCards.Length; i++)
+        //{
+        //    selectedCards[i].Rotate();
+        //}
+        StartCoroutine(WrongMatchCoroutine());
+    }
+    #endregion
+
+    #region coroutines
+    IEnumerator WrongMatchCoroutine()
+    {
+        canSelectCard = false;
+        yield return delay;
+        for (int i = 0; i < selectedCards.Length; i++)
+        {
+            selectedCards[i].Rotate();
+            selectedCards[i] = null;
+        }
+        canSelectCard = true;
+    }
+    IEnumerator OnMatchCoroutine()
+    {
+        canSelectCard = false;
+        yield return delay;
+        for (int i = 0; i < selectedCards.Length; i++)
+        {
+            selectedCards[i].gameObject.SetActive(false);
+            selectedCards[i] = null;
+        }
+        canSelectCard = true;
     }
     #endregion
 }

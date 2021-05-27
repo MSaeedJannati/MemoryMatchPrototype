@@ -39,9 +39,9 @@ public class ScoreVIew : MonoBehaviour
     {
         timerText.color = colour;
     }
-    public void ClickOnPause()
+    public void ClickOnPause(bool pause)
     {
-        
+        ScoreApp.instance.Pause(pause);
     }
     #endregion
 }

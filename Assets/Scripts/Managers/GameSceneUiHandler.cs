@@ -14,11 +14,13 @@ public class GameSceneUiHandler : MonoBehaviour
     {
         GameStateManager.onWin += LevelWon;
         GameStateManager.onLose += LevelLost;
+        ScoreApp.OnPuase += Pause;
     }
     private void OnDisable()
     {
         GameStateManager.onWin -= LevelWon;
         GameStateManager.onLose -= LevelLost;
+        ScoreApp.OnPuase -= Pause;
     }
     #endregion
     #region Functions
@@ -30,13 +32,14 @@ public class GameSceneUiHandler : MonoBehaviour
     {
         losePopUp.SetActive(true);
     }
-    public void Pause()
+    public void Pause(bool paused)
     {
-        pausePopUp.SetActive(true);
+        pausePopUp.SetActive(paused);
     }
     public void Continue()
     {
         pausePopUp.SetActive(false);
     }
+  
     #endregion
 }

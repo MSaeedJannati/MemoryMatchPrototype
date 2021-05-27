@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Vector2 TotalGap;
     [SerializeField] int levelInitTime;
     [SerializeField] int levlIndex;
+    [SerializeField] int baseMatchScore;
     [SerializeField] Color[] colours;
 
    
@@ -29,14 +30,17 @@ public class GameManager : MonoBehaviour
     static bool canSelectCard;
     public delegate void myVoidEvent();
     public delegate void MyIntEvent(int cardsCount);
-    public static event myVoidEvent Match;
+    public delegate void MyVectorDelegate(Vector3 pos);
+    public static event MyVectorDelegate Match;
     public static event myVoidEvent WrongMatch;
     public static event MyIntEvent OnLevelStart;
+
     #endregion
     #region properties
     public static bool CanSelectCard => canSelectCard;
     public int LevelIndex => levlIndex;
     public int StartTime => levelInitTime;
+    public int BaseScore => baseMatchScore;
     #endregion
     #region MonobehaviourCallbacks
     private void OnEnable()
@@ -232,13 +236,14 @@ public class GameManager : MonoBehaviour
     IEnumerator OnMatchCoroutine()
     {
         canSelectCard = false;
+        Vector3 secondPos = selectedCards[1].transform.position;
         yield return delay;
         for (int i = 0; i < selectedCards.Length; i++)
         {
             selectedCards[i].gameObject.SetActive(false);
             selectedCards[i] = null;
         }
-        Match?.Invoke();
+        Match?.Invoke(secondPos);
         canSelectCard = true;
     }
     #endregion

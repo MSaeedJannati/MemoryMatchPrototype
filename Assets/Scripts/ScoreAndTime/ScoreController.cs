@@ -6,15 +6,22 @@ public class ScoreController : MonoBehaviour
 {
     #region Variables
     WaitForSeconds oneSec = new WaitForSeconds(1.0f);
+    
     #endregion
     #region MonobehaviourCallBacks
     private void OnEnable()
     {
-        GameManager.Match += CardsCountChange;
+        GameManager.Match += Matched;
+        GameManager.WrongMatch += WrongMatch;
+        GameStateManager.onWin += OnWin;
+        ScoreApp.OnPuase += Pause;
     }
     private void OnDisable()
     {
-        GameManager.Match -= CardsCountChange;
+        GameManager.Match -= Matched;
+        GameManager.WrongMatch -= WrongMatch;
+        GameStateManager.onWin -= OnWin;
+        ScoreApp.OnPuase -= Pause;
     }
     #endregion
     #region Functions
@@ -32,6 +39,23 @@ public class ScoreController : MonoBehaviour
 
         StartCoroutine(TimreCoroutine());
     }
+    public void Matched(Vector3 pos)
+    {
+        CardsCountChange();
+        int deltaScore = ScoreApp.instance.ModelRef.GetBaseScore() * (1 + ScoreApp.instance.ModelRef.GetCombo());
+        ScoreApp.instance.ModelRef.IncreaseCombo();
+        ScoreChanged(deltaScore);
+        CreateScoreText(pos, deltaScore);
+    }
+    public void WrongMatch()
+    {
+        ScoreApp.instance.ModelRef.ResetCombo();
+    }
+    public void OnWin()
+    {
+        ScoreApp.instance.ModelRef.SetIsPaused(true);
+
+    }
      void ScoreChanged(int deltaScore)
     {
         int score = ScoreApp.instance.ModelRef.GetScore()+ deltaScore;
@@ -40,7 +64,6 @@ public class ScoreController : MonoBehaviour
     }
      void CardsCountChange()
     {
-        print("Here");
         int cards = ScoreApp.instance.ModelRef.GetRemainingCards() - 2;
         ScoreApp.instance.ModelRef.SetRemainingCards(cards);
         string goalText = $"{cards}/{ScoreApp.instance.ModelRef.GetInitCardCount()}";
@@ -51,6 +74,21 @@ public class ScoreController : MonoBehaviour
         if (remainingTime < 30)
         {
             ScoreApp.instance.ViewRef.SetTimerTextColour(Color.red);
+        }
+    }
+    public void Pause(bool paused)
+    {
+        ScoreApp.instance.ModelRef.SetIsPaused(paused);
+        
+    }
+    public void CreateScoreText(Vector3 pos,int deltaScore)
+    {
+        if (ObjectPool.Instantiate(
+            ScoreApp.instance.ModelRef.scorePopPrefab, 
+            pos, Quaternion.identity).
+            TryGetComponent<ScorePopHandler>(out var scoreTxt))
+        {
+            scoreTxt.SetText(deltaScore);
         }
     }
     #endregion
@@ -77,6 +115,7 @@ public class ScoreController : MonoBehaviour
             }
             yield return oneSec;
         }
+        ScoreApp.instance.ModelRef.SetIsPaused(true);
         ScoreApp.instance.TimeReachedZero();
     }
     #endregion

@@ -258,6 +258,9 @@ MonoBehaviour:
   initCardCount: 0
   score: 0
   IsPaused: 0
+  CurrentCombo: 0
+  baseMatchScore: 0
+  scorePopPrefab: {fileID: 6799666531326875677, guid: df00413c3aed47443996912bf3d776f0, type: 3}
 --- !u!1 &83737290
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,7 +432,7 @@ RectTransform:
   - {fileID: 841426708}
   - {fileID: 1708146800}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1279,13 +1282,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 344410039}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.109, y: 0, z: 0}
   m_LocalScale: {x: 5.553222, y: 8.335467, z: 1}
   m_Children:
+  - {fileID: 1490805819}
   - {fileID: 1541417685}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 579996365}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &373666989
 GameObject:
@@ -1326,8 +1330,9 @@ MonoBehaviour:
     coloumnCount: 3
   cardsParentTransform: {fileID: 1541417685}
   TotalGap: {x: 0.5, y: 0.4}
-  levelInitTime: 10
+  levelInitTime: 80
   levlIndex: 23
+  baseMatchScore: 10
   colours: []
 --- !u!4 &373666991
 Transform:
@@ -1567,8 +1572,8 @@ Transform:
   m_LocalPosition: {x: -2.5, y: 3.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_Father: {fileID: 1365674028}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &472412068
 GameObject:
@@ -1901,8 +1906,8 @@ Transform:
   m_LocalPosition: {x: 2.5, y: -3.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 1365674028}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &567932822
 GameObject:
@@ -1996,6 +2001,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 567932822}
   m_CullTransparentMesh: 1
+--- !u!1 &579996364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 579996365}
+  m_Layer: 0
+  m_Name: CardPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &579996365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579996364}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 344410041}
+  - {fileID: 1365674028}
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &580232607
 GameObject:
   m_ObjectHideFlags: 0
@@ -2930,7 +2967,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -74.64}
+  m_AnchoredPosition: {x: 0, y: -74.640015}
   m_SizeDelta: {x: 0, y: 149.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &924226334
@@ -3433,7 +3470,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -203.95, y: 1312.78}
+  m_AnchoredPosition: {x: -203.95001, y: 1312.78}
   m_SizeDelta: {x: 150.71, y: 153.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1020754411
@@ -3494,7 +3531,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1020754413}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1708146801}
+        m_TargetAssemblyTypeName: ScoreApp, Assembly-CSharp
+        m_MethodName: Pause
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1020754413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4715,14 +4764,14 @@ MonoBehaviour:
       - m_Target: {fileID: 2053414937}
         m_TargetAssemblyTypeName: ScoreVIew, Assembly-CSharp
         m_MethodName: ClickOnPause
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1329278415
 MonoBehaviour:
@@ -5033,6 +5082,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364018163}
   m_CullTransparentMesh: 1
+--- !u!1 &1365674027
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1365674028}
+  m_Layer: 0
+  m_Name: Criterians
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1365674028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365674027}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 452510677}
+  - {fileID: 567223360}
+  m_Father: {fileID: 579996365}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1383263342
 GameObject:
   m_ObjectHideFlags: 0
@@ -5269,11 +5350,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490805818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0119, y: 0, z: 0}
-  m_LocalScale: {x: 4.444109, y: 6.5850205, z: 0.82039}
+  m_LocalPosition: {x: 0.017485345, y: 0, z: 0}
+  m_LocalScale: {x: 0.8002758, y: 0.79000014, z: 0.82039}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 344410041}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1490805820
 SpriteRenderer:
@@ -5488,7 +5569,7 @@ Transform:
   m_LocalScale: {x: 0.18007565, y: 0.11996928, z: 1}
   m_Children: []
   m_Father: {fileID: 344410041}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1642264247
 GameObject:
@@ -5795,7 +5876,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1708764231}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1708146801}
+        m_TargetAssemblyTypeName: ScoreApp, Assembly-CSharp
+        m_MethodName: Pause
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1708764231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7037,5 +7130,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

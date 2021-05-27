@@ -34,7 +34,7 @@ public class GameStateManager : MonoBehaviour
         levelTotalInitCard = cardsCount;
         remainingCards = cardsCount;
     }
-    public void decreseCards()
+    public void decreseCards(Vector3 pos)
     {
         remainingCards -= 2;
         if (remainingCards < 1)

@@ -12,6 +12,10 @@ public class ScoreModel : MonoBehaviour
     [SerializeField] int initCardCount;
     [SerializeField] int score;
     [SerializeField] bool IsPaused;
+    [SerializeField] int CurrentCombo;
+    [SerializeField] int baseMatchScore;
+
+    public GameObject scorePopPrefab;
     #endregion
     #region Functions
 
@@ -23,9 +27,15 @@ public class ScoreModel : MonoBehaviour
     public int GetInitCardCount() => initCardCount;
     public int GetScore() => score;
     public bool GetIsPaused() => IsPaused;
+    public int GetCombo() => CurrentCombo;
+    public int GetBaseScore() => baseMatchScore;
     #endregion
 
     #region Setters
+    public void SetBaseScore(int value)
+    {
+        baseMatchScore = value;
+    }
     public void SetLevelTime(int time)
     {
         levelTime = time;
@@ -53,6 +63,14 @@ public class ScoreModel : MonoBehaviour
     public void SetIsPaused(bool value)
     {
         IsPaused = value;
+    }
+    public void IncreaseCombo()
+    {
+        CurrentCombo++;
+    }
+    public void ResetCombo()
+    {
+        CurrentCombo = 0;
     }
     #endregion
 

@@ -12,7 +12,9 @@ public class ScoreApp : MonoBehaviour
 
 
     public delegate void MyVoidDelegate();
+    public delegate void MyBoolDelegate(bool pause);
     public static event MyVoidDelegate timeReachedZero;
+    public static event MyBoolDelegate OnPuase;
     #endregion
     #region Getter Properties
     public ScoreController ControllerRef => controllerRef;
@@ -58,6 +60,12 @@ public class ScoreApp : MonoBehaviour
         modelRef.SetRemainingCards(cardsCount);
         modelRef.SetRemainingTime(GameManager.instance.StartTime);
         modelRef.SetScore(0);
+        modelRef.ResetCombo();
+        modelRef.SetBaseScore(GameManager.instance.BaseScore);
+    }
+   public  void Pause(bool pause)
+    {
+        OnPuase?.Invoke(pause);
     }
     #endregion
 }

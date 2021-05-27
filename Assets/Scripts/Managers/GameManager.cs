@@ -6,21 +6,37 @@ using GameManagerCalsses;
 public class GameManager : MonoBehaviour
 {
     #region Variables
-    public static GameManager instance;
     [SerializeField] GridCriterians Criterians;
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GridInfo gridInfo;
     [SerializeField] Transform cardsParentTransform;
     [SerializeField] Vector2 TotalGap;
+    [SerializeField] int levelInitTime;
+    [SerializeField] int levlIndex;
+    [SerializeField] Color[] colours;
+
+   
+    WaitForSeconds delay = new WaitForSeconds(.7f);
+
+
+    public static GameManager instance;
+
+    Card[] selectedCards;
+
     bool hasXPadding = false;
     bool hasYPadding = false;
-    Card[] selectedCards;
-    [SerializeField] Color[] colours;
+
     static bool canSelectCard;
-    WaitForSeconds delay = new WaitForSeconds(.7f);
+    public delegate void myVoidEvent();
+    public delegate void MyIntEvent(int cardsCount);
+    public static event myVoidEvent Match;
+    public static event myVoidEvent WrongMatch;
+    public static event MyIntEvent OnLevelStart;
     #endregion
     #region properties
     public static bool CanSelectCard => canSelectCard;
+    public int LevelIndex => levlIndex;
+    public int StartTime => levelInitTime;
     #endregion
     #region MonobehaviourCallbacks
     private void OnEnable()
@@ -63,6 +79,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        OnLevelStart?.Invoke(gridInfo.rowCount* gridInfo.coloumnCount);
         canSelectCard = true;
     }
     [ContextMenu("clear the grid")]
@@ -191,19 +208,10 @@ public class GameManager : MonoBehaviour
     }
     void OnMatch()
     {
-        //for (int i = 0; i < selectedCards.Length; i++)
-        //{
-        //    selectedCards[i].gameObject.SetActive(false);
-        //    selectedCards[i] = null;
-        //}
         StartCoroutine(OnMatchCoroutine());
     }
     void OnWrongMatch()
     {
-        //for (int i = 0; i < selectedCards.Length; i++)
-        //{
-        //    selectedCards[i].Rotate();
-        //}
         StartCoroutine(WrongMatchCoroutine());
     }
     #endregion
@@ -218,6 +226,7 @@ public class GameManager : MonoBehaviour
             selectedCards[i].Rotate();
             selectedCards[i] = null;
         }
+        WrongMatch?.Invoke();
         canSelectCard = true;
     }
     IEnumerator OnMatchCoroutine()
@@ -229,6 +238,7 @@ public class GameManager : MonoBehaviour
             selectedCards[i].gameObject.SetActive(false);
             selectedCards[i] = null;
         }
+        Match?.Invoke();
         canSelectCard = true;
     }
     #endregion

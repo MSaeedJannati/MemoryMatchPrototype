@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 public class GameStateManager : MonoBehaviour
 {
     #region Variables
@@ -42,13 +42,50 @@ public class GameStateManager : MonoBehaviour
             Win();
         }
     }
+    public void checkIfNewLevelUnlocked()
+    {
+        if (GameManager.instance.LevelIndex > Cache.getLastLevel())
+        {
+            Cache.setLastLevel(GameManager.instance.LevelIndex);
+        }
+    }
+    public void checkForStars()
+    {
+        var score = ScoreApp.instance.ModelRef.GetScore();
+        int starsGained = 0; ;
+        print($"Score:{score}");
+        print($"Ranges:{JsonConvert.SerializeObject(GameManager.instance.ScoreRanges)}");
+        for (int i = 0; i < GameManager.instance.ScoreRanges. Length; i++)
+        {
+            if (score >= GameManager.instance.ScoreRanges[i])
+            {
+                starsGained++;
+            }
+        }
+        var stars = Cache.getLevelStars();
+        var index = GameManager.instance.LevelIndex - 1;
+        if (starsGained > stars[index])
+        {
+            stars[index] = starsGained;
+            Cache.setStars(stars);
+        }
+    }
     public void Win()
     {
         onWin?.Invoke();
+        StartCoroutine(checkForStarsCoroutine());
+        checkIfNewLevelUnlocked();
     }
     public void Lose()
     {
         onLose?.Invoke();
+    }
+    #endregion
+    #region coroutines
+    IEnumerator checkForStarsCoroutine()
+    {
+        yield return null;
+        checkForStars();
     }
     #endregion
 }

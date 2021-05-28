@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomEnums;
 
 public class GameSceneUiHandler : MonoBehaviour
 {
@@ -40,6 +41,13 @@ public class GameSceneUiHandler : MonoBehaviour
     {
         pausePopUp.SetActive(false);
     }
-  
+    public void LoadMain()
+    {
+        SceneManagementLogic.instance.ChangeScene(Scenes.MAIN);
+    }
+    public void Reset()
+    {
+        SceneManagementLogic.instance.ChangeScene(Scenes.GAME);
+    }
     #endregion
 }

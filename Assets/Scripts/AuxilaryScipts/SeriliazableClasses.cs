@@ -18,3 +18,30 @@ namespace GameManagerCalsses
     }
 }
 #endregion
+
+#region MainUIClasses
+namespace MainUICalsses
+{
+    [System.Serializable]
+    public class Level
+    {
+        public string Name;
+        public int time;
+        public int Cards;
+        public int row;
+        public int coloumn;
+        public int[] scoreRanges = new int[3];
+    }
+}
+#endregion
+#region enums
+namespace CustomEnums
+{
+    [System.Serializable]
+    public enum Scenes
+    {
+        MAIN,
+        GAME
+    }
+}
+#endregion

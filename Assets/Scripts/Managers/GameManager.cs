@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] int levelInitTime;
     [SerializeField] int levlIndex;
     [SerializeField] int baseMatchScore;
+    [SerializeField] int[] scoreRanges;
+    [SerializeField] int initCardCount;
     [SerializeField] Color[] colours;
 
    
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
     public int LevelIndex => levlIndex;
     public int StartTime => levelInitTime;
     public int BaseScore => baseMatchScore;
+    public int InitCardCount => initCardCount;
+    public int[] ScoreRanges => scoreRanges;
     #endregion
     #region MonobehaviourCallbacks
     private void OnEnable()
@@ -58,11 +62,20 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        readDataFromCache();
         CreateGrid();
 
     }
     #endregion
     #region Functions
+    void readDataFromCache()
+    {
+        gridInfo.coloumnCount = Cache.LoadedLevel.coloumn;
+        gridInfo.rowCount= Cache.LoadedLevel.row;
+        levelInitTime = Cache.LoadedLevel.time;
+        levlIndex = Cache.LvlIndex;
+        scoreRanges = Cache.LoadedLevel.scoreRanges;
+    }
     [ContextMenu("create grid test")]
     void CreateGrid()
     {

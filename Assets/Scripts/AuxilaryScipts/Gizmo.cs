@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GizmoFactory;
 
 public class Gizmo : MonoBehaviour
 {
@@ -59,9 +58,7 @@ public class Gizmo : MonoBehaviour
     }
     #endregion
 }
-#region GizmoTypeFactory
-namespace GizmoFactory
-{
+
   
 
     #region Enums
@@ -76,5 +73,3 @@ namespace GizmoFactory
         SHADED
     }
     #endregion
-}
-#endregion

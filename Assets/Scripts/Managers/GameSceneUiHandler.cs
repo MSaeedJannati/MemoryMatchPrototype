@@ -43,7 +43,14 @@ public class GameSceneUiHandler : MonoBehaviour
     }
     public void LoadMain()
     {
-        SceneManagementLogic.instance.ChangeScene(Scenes.MAIN);
+        if (!Cache.IsEditor)
+        {
+            SceneManagementLogic.instance.ChangeScene(Scenes.MAIN);
+        }
+        else
+        {
+            SceneManagementLogic.instance.ChangeScene(CustomEnums.Scenes.EDITOR);
+        }
     }
     public void Reset()
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameManagerCalsses;
+using Newtonsoft.Json;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int initCardCount;
     [SerializeField] Color[] colours;
 
-   
+
     WaitForSeconds delay = new WaitForSeconds(.7f);
 
 
@@ -70,8 +71,8 @@ public class GameManager : MonoBehaviour
     #region Functions
     void readDataFromCache()
     {
-        gridInfo.coloumnCount = Cache.LoadedLevel.coloumn;
-        gridInfo.rowCount= Cache.LoadedLevel.row;
+        gridInfo.coloumnCount = Cache.LoadedLevel.gridInfo.coloumnCount;
+        gridInfo.rowCount = Cache.LoadedLevel.gridInfo.rowCount;
         levelInitTime = Cache.LoadedLevel.time;
         levlIndex = Cache.LvlIndex;
         scoreRanges = Cache.LoadedLevel.scoreRanges;
@@ -81,24 +82,44 @@ public class GameManager : MonoBehaviour
     {
         Vector3 scale = CalcScale();
         Vector3 pos = Vector3.zero;
-        List<int> ids = creatIDList();
-        colours = createColorList();
+        int cardsCount = calcCardsCount();
+        List<int> ids = creatIDList(cardsCount);
+        colours = createColorList(cardsCount);
         for (int i = 0; i < gridInfo.rowCount; i++)
         {
             for (int j = 0; j < gridInfo.coloumnCount; j++)
             {
-                if (ObjectPool.Instantiate(cardPrefab, cardsParentTransform).TryGetComponent(out Card card))
+                if (ObjectPool.Instantiate(cardPrefab, cardsParentTransform).
+                    TryGetComponent(out Card card))
                 {
-                    pos = CalcPos(i, j, ref scale);
-                    card.SetId(getRnadomIdFromList(ids));
-                    card.SetCardAppearence(ref pos, ref scale);
-                    card.SetForeAppearence(colours[card.ID]);
+                    if (Cache.LoadedLevel.gridStatus[i, j] == 0)
+                    {
+                        card.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        pos = CalcPos(i, j, ref scale);
+                        card.SetId(getRnadomIdFromList(ids));
+                        card.SetCardAppearence(ref pos, ref scale);
+                        card.SetForeAppearence(colours[card.ID]);
+                    }
                 }
             }
         }
-        OnLevelStart?.Invoke(gridInfo.rowCount* gridInfo.coloumnCount);
+        OnLevelStart?.Invoke(cardsCount);
         canSelectCard = true;
     }
+    public int calcCardsCount()
+    {
+        int outPut = 0;
+        foreach (var card in Cache.LoadedLevel.gridStatus)
+        {
+            if (card != 0)
+                outPut++;
+        }
+        return outPut;
+    }
+
     [ContextMenu("clear the grid")]
     void clearGrid()
     {
@@ -155,10 +176,10 @@ public class GameManager : MonoBehaviour
 
     }
 
-    List<int> creatIDList()
+    List<int> creatIDList(int cards)
     {
 
-        int count = gridInfo.rowCount * gridInfo.coloumnCount / 2;
+        int count = cards / 2;
         List<int> ids = new List<int>(count * 2);
         for (int i = 0; i < count; i++)
         {
@@ -167,9 +188,9 @@ public class GameManager : MonoBehaviour
         }
         return ids;
     }
-    Color[] createColorList()
+    Color[] createColorList(int cards)
     {
-        var cols = new Color[gridInfo.rowCount * gridInfo.coloumnCount / 2];
+        var cols = new Color[cards / 2];
         for (int i = 0; i < cols.Length; i++)
         {
             cols[i] = new Color(getRandNum(), getRandNum(), getRandNum(), 1.0f);

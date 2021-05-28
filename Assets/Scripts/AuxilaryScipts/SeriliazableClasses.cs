@@ -28,9 +28,9 @@ namespace MainUICalsses
         public string Name;
         public int time;
         public int Cards;
-        public int row;
-        public int coloumn;
+        public GameManagerCalsses.GridInfo gridInfo;
         public int[] scoreRanges = new int[3];
+        public int[,] gridStatus;
     }
 }
 #endregion
@@ -41,7 +41,8 @@ namespace CustomEnums
     public enum Scenes
     {
         MAIN,
-        GAME
+        GAME,
+        EDITOR
     }
 }
 #endregion

@@ -44,17 +44,15 @@ public class GameStateManager : MonoBehaviour
     }
     public void checkIfNewLevelUnlocked()
     {
-        if (GameManager.instance.LevelIndex > Cache.getLastLevel())
+        if (GameManager.instance.LevelIndex+1 > Cache.getLastLevel())
         {
-            Cache.setLastLevel(GameManager.instance.LevelIndex);
+            Cache.setLastLevel(GameManager.instance.LevelIndex+1);
         }
     }
     public void checkForStars()
     {
         var score = ScoreApp.instance.ModelRef.GetScore();
-        int starsGained = 0; ;
-        print($"Score:{score}");
-        print($"Ranges:{JsonConvert.SerializeObject(GameManager.instance.ScoreRanges)}");
+        int starsGained = 0; 
         for (int i = 0; i < GameManager.instance.ScoreRanges. Length; i++)
         {
             if (score >= GameManager.instance.ScoreRanges[i])
@@ -63,7 +61,7 @@ public class GameStateManager : MonoBehaviour
             }
         }
         var stars = Cache.getLevelStars();
-        var index = GameManager.instance.LevelIndex - 1;
+        var index = GameManager.instance.LevelIndex ;
         if (starsGained > stars[index])
         {
             stars[index] = starsGained;
@@ -72,13 +70,28 @@ public class GameStateManager : MonoBehaviour
     }
     public void Win()
     {
-        onWin?.Invoke();
-        StartCoroutine(checkForStarsCoroutine());
-        checkIfNewLevelUnlocked();
+
+        if (!Cache.IsEditor)
+        {
+            onWin?.Invoke();
+            StartCoroutine(checkForStarsCoroutine());
+            checkIfNewLevelUnlocked();
+        }
+        else
+        {
+            SceneManagementLogic.instance.ChangeScene(CustomEnums.Scenes.EDITOR);
+        }
     }
     public void Lose()
     {
-        onLose?.Invoke();
+        if (!Cache.IsEditor)
+        {
+            onLose?.Invoke();
+        }
+        else
+        {
+            SceneManagementLogic.instance.ChangeScene(CustomEnums.Scenes.EDITOR);
+        }
     }
     #endregion
     #region coroutines

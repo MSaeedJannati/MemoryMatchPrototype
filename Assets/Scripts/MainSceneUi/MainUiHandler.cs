@@ -11,7 +11,8 @@ public class MainUiHandler : MonoBehaviour
 
     //[0]==>off,[1]==>currentLevel,[2]==>passed
     [SerializeField] Color[] lampColours;
-    [SerializeField] Level[] levels;
+    [SerializeField] Object[] levels;
+
 
     public static MainUiHandler instance;
 
@@ -46,7 +47,7 @@ public class MainUiHandler : MonoBehaviour
     #region Functions
     public void LoadLevel(int index)
     {
-        Cache.LoadLevel(levels[index-1]);
+        Cache.LoadLevelJson(index-1, levels[index - 1].ToString(), false);
         SceneManagementLogic.instance.ChangeScene(Scenes.GAME);
     }
     public void loadStars()
@@ -67,7 +68,8 @@ public class MainUiHandler : MonoBehaviour
         int lastLevel = Cache.getLastLevel();
         for (int i = 0; i < levels.Length; i++)
         {
-            if (ObjectPool.Instantiate(cardPrefab, scrollContent).TryGetComponent<LevelCard>(out var card))
+            if (ObjectPool.Instantiate(cardPrefab, scrollContent).
+                TryGetComponent<LevelCard>(out var card))
             {
                 card.setIndex(i + 1);
                 if (i < lastLevel)

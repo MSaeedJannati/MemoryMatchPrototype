@@ -505,66 +505,17 @@ MonoBehaviour:
   - {r: 0.9056604, g: 0.7475971, b: 0.11534355, a: 1}
   - {r: 0.16635376, g: 0.9716981, b: 0.087086126, a: 1}
   levels:
-  - Name: 1
-    time: 45
-    Cards: 4
-    row: 2
-    coloumn: 2
-    scoreRanges: 0a000000140000001e000000
-  - Name: 2
-    time: 60
-    Cards: 6
-    row: 3
-    coloumn: 2
-    scoreRanges: 0a000000140000001e000000
-  - Name: 3
-    time: 80
-    Cards: 8
-    row: 2
-    coloumn: 4
-    scoreRanges: 0a000000140000001e000000
-  - Name: 4
-    time: 90
-    Cards: 10
-    row: 2
-    coloumn: 5
-    scoreRanges: 0a000000140000001e000000
-  - Name: 5
-    time: 110
-    Cards: 12
-    row: 3
-    coloumn: 4
-    scoreRanges: 0a000000140000001e000000
-  - Name: 6
-    time: 125
-    Cards: 16
-    row: 4
-    coloumn: 4
-    scoreRanges: 0a000000140000001e000000
-  - Name: 7
-    time: 120
-    Cards: 14
-    row: 7
-    coloumn: 2
-    scoreRanges: 0a000000140000001e000000
-  - Name: 8
-    time: 135
-    Cards: 20
-    row: 4
-    coloumn: 5
-    scoreRanges: 0a000000140000001e000000
-  - Name: 9
-    time: 140
-    Cards: 24
-    row: 4
-    coloumn: 6
-    scoreRanges: 0a000000140000001e000000
-  - Name: 10
-    time: 150
-    Cards: 24
-    row: 6
-    coloumn: 4
-    scoreRanges: 0a000000140000001e000000
+  - {fileID: 4900000, guid: e709363ce8992134ba7c6f31aeb10827, type: 3}
+  - {fileID: 4900000, guid: f318a1d1d8ef174449e39378070186bc, type: 3}
+  - {fileID: 4900000, guid: 6e9b3b4c87a2ecb4f8e905fd4c6784a8, type: 3}
+  - {fileID: 4900000, guid: 430f45d6764f9d84aa6771c2f7545554, type: 3}
+  - {fileID: 4900000, guid: ee229d8a8592fdc46b282e350ce50a8b, type: 3}
+  - {fileID: 4900000, guid: ec3bf5c29f0373842a94d1f034cd897a, type: 3}
+  - {fileID: 4900000, guid: 15a3caec3903c0d42b8448e43a3fb0b6, type: 3}
+  - {fileID: 4900000, guid: 17becb051c8d8d4478e09176a14bd5b3, type: 3}
+  - {fileID: 4900000, guid: dcd3d49f76003694fa93911befcbfcd6, type: 3}
+  - {fileID: 4900000, guid: f115a390b0c58b845a3e0a227ac85e7e, type: 3}
+  - {fileID: 4900000, guid: 252e877241ccf404897b4e21b1a00718, type: 3}
   cardPrefab: {fileID: 2805485408756079265, guid: cfc7a4b7c95538548a1b22a585da92e7, type: 3}
   scrollContent: {fileID: 1972432137}
   stars: 

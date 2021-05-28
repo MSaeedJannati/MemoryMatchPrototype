@@ -39,11 +39,13 @@ public class SceneManagementLogic : MonoBehaviour
     IEnumerator ChangeSceneCoroutine(Scenes scene)
     {
         uiScrptRef.Fade(true);
-        //scenes are loading too fast atm so later on we can get rid of this coroutine and move
+        //scenes are loading too fast atm so later on we 
+        //can get rid of this coroutine and move
         //it's contents to ChangeScene function
         yield return delay;
         yield return delay;
-        SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Single).completed += (assyncOpr) =>
+        SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Single).completed +=
+            (assyncOpr) =>
         {
             uiScrptRef.Fade(false);
         };

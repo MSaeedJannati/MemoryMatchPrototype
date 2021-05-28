@@ -3,34 +3,64 @@ using System.Collections.Generic;
 using UnityEngine;
 using MainUICalsses;
 using Newtonsoft.Json;
+using GameManagerCalsses;
 
 public static class Cache
 {
     #region Variables
     static Level loadedLevel;
     static int lvlIndex;
+    static bool isEditor;
     #endregion
     #region Properties
     public static Level LoadedLevel=> loadedLevel;
     public static int LvlIndex=> lvlIndex;
+    public static bool IsEditor
+    {
+        get 
+        {
+            return isEditor; 
+        }
+        set 
+        {
+            isEditor = value;
+        }
+    }
     #endregion
     #region Calsses
-    public static void LoadLevel(Level lvl)
+    public static void LoadLevelJson(int levelIndex, string json, bool isEditor)
     {
         loadedLevel = new Level();
-        int.TryParse(lvl.Name, out lvlIndex);
-        //create a deep copy of lvl, maybe not neccesry yet but could be 
-        //usefull when Level class grows and has fields with type of other classes
-        loadedLevel.row = lvl.row;
-        loadedLevel.time = lvl.time;
-        loadedLevel.Cards = lvl.Cards;
-        loadedLevel.coloumn = lvl.coloumn;
-        loadedLevel.scoreRanges=new int[ lvl.scoreRanges.Length];
-        for (int i = 0; i < loadedLevel.scoreRanges.Length; i++)
+        lvlIndex = levelIndex;
+        IsEditor = isEditor;
+        Hashtable levelData = new Hashtable();
+        levelData = JsonConvert.DeserializeObject(json, typeof(Hashtable)) as Hashtable;
+        if (levelData.ContainsKey("level_time"))
         {
-            loadedLevel.scoreRanges[i] = lvl.scoreRanges[i];
+            int.TryParse(levelData["level_time"].ToString(), out loadedLevel.time);
         }
-
+        loadedLevel.gridInfo = new GridInfo();
+        if (levelData.ContainsKey("grid_Info"))
+        {
+            loadedLevel.gridInfo = JsonConvert.DeserializeObject(
+                JsonConvert.SerializeObject(levelData["grid_Info"]),
+                typeof(GridInfo)
+                ) as GridInfo;
+        }
+        if (levelData.ContainsKey("score_ranges"))
+        {
+            loadedLevel.scoreRanges = JsonConvert.DeserializeObject(
+                JsonConvert.SerializeObject(levelData["score_ranges"]),
+                typeof(int[])
+                ) as int[];
+        }
+        if (levelData.ContainsKey("grid_status"))
+        {
+            loadedLevel.gridStatus = JsonConvert.DeserializeObject(
+                JsonConvert.SerializeObject(levelData["grid_status"]),
+                typeof(int[,])
+                ) as int[,];
+        }
     }
     public static int getLastLevel()
     {
